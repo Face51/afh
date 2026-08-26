@@ -1,0 +1,7 @@
+
+INSERT INTO Client_master VALUES('C001', 'Ivan Bayross', 'P-76', 'Worli', 'Bombay', 'Maharastra', 400054, 15000);
+INSERT INTO Client_master VALUES('C002', 'Vandana Satiwal', '128', 'Adams Street', 'Madras', 'TamilNadu', 780001, 0);
+INSERT INTO Client_master VALUES('C003', 'Pramada Jaguste', '157', 'Gopalpur', 'Kolkata', 'West Bengal', 700058, 5000);
+INSERT INTO Client_master VALUES('C004', 'Basu Navindgi', 'A/12', 'Nariman', 'Bombay', 'Maharastra', 400056, 0);
+INSERT INTO Client_master VALUES('C005', 'Ravi Sreedharan', 'B/34', 'Rajnagar', 'Delhi', 'Delhi', 100001, 2000);
+INSERT INTO Client_master VALUES('C006', 'Rukmini', 'Q-12', 'Bandra', 'Bombay', 'Maharastra', 400050, 0);
