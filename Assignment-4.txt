@@ -1,0 +1,81 @@
+ASSIGNMENT - 4
+(Using default Oracle tables EMP and DEPT)
+
+1. Display the names of all employees' right aligning them to 15 characters.
+SELECT LPAD(ENAME, 15) AS ENAME
+FROM EMP;
+
+2. Display the names of all employees' padding them to the right up to 15
+   characters with '*'.
+SELECT RPAD(ENAME, 15, '*') AS ENAME
+FROM EMP;
+
+3. Find the details of all the managers in department 10 and all clerks in
+   department 20 and all employees who are neither managers nor clerks but
+   whose salary is more than or equal to 2000/-.
+SELECT *
+FROM EMP
+WHERE (JOB = 'MANAGER' AND DEPTNO = 10)
+OR (JOB = 'CLERK' AND DEPTNO = 20)
+OR (JOB NOT IN ('MANAGER', 'CLERK') AND SAL >= 2000);
+
+4. List all the employees who have joined between 01/02/81 and 31/08/81.
+SELECT *
+FROM EMP
+WHERE HIREDATE BETWEEN TO_DATE('01/02/81', 'DD/MM/YY')
+AND TO_DATE('31/08/81', 'DD/MM/YY');
+
+5. List all the employees who were joined as manager during 1981.
+SELECT *
+FROM EMP
+WHERE JOB = 'MANAGER'
+AND TO_CHAR(HIREDATE, 'YYYY') = '1981';
+
+6. List the employees whose salaries are 800, 1600 or 2450.
+SELECT *
+FROM EMP
+WHERE SAL IN (800, 1600, 2450);
+
+7. List the names of all employees who are either 'clerks' or 'salesman' or
+   'analyst'.
+SELECT ENAME
+FROM EMP
+WHERE JOB IN ('CLERK', 'SALESMAN', 'ANALYST');
+
+8. List the total number of employees and the average salaries of the
+   different departments.
+SELECT DEPTNO, COUNT(*) AS Total_Employees, AVG(SAL) AS Average_Salary
+FROM EMP
+GROUP BY DEPTNO;
+
+9. Calculate the average salary of all employees whose department is 30.
+SELECT AVG(SAL) AS Average_Salary
+FROM EMP
+WHERE DEPTNO = 30;
+
+10. Calculate the minimum salary earn by a 'clerks'.
+SELECT MIN(SAL) AS Min_Salary
+FROM EMP
+WHERE JOB = 'CLERK';
+
+11. Calculate the maximum salary earn by salesman.
+SELECT MAX(SAL) AS Max_Salary
+FROM EMP
+WHERE JOB = 'SALESMAN';
+
+12. Find the names of those employees whose immediate boss is in different
+    department.
+SELECT E.ENAME
+FROM EMP E, EMP M
+WHERE E.MGR = M.EMPNO
+AND E.DEPTNO != M.DEPTNO;
+
+13. Calculate the no of employees who are not getting any commission.
+SELECT COUNT(*) AS No_Commission_Count
+FROM EMP
+WHERE COMM IS NULL OR COMM = 0;
+
+14. Find the department is not having any employee.
+SELECT *
+FROM DEPT
+WHERE DEPTNO NOT IN (SELECT DEPTNO FROM EMP WHERE DEPTNO IS NOT NULL);

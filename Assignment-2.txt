@@ -1,0 +1,72 @@
+ASSIGNMENT - 2
+(Based on Client_master_21340425026, Product_master_21340425026, Sales_order_21340425026,
+Sales_order_details_21340425026)
+
+1. Find the names of all clients having 'a' as the second letter in their names.
+SELECT Name
+FROM Client_master_21340425026
+WHERE Name LIKE '_a%';
+
+2. Find out the clients who do not stay in a city whose first letter is 'B'.
+SELECT *
+FROM Client_master_21340425026
+WHERE City NOT LIKE 'B%';
+
+3. List the names and city of all clients who have exactly 12 characters in length
+   and starts with 'I'.
+SELECT Name, City
+FROM Client_master_21340425026
+WHERE LENGTH(Name) = 12
+AND Name LIKE 'I%';
+
+4. Find the list of all clients who stay in 'Bombay' or 'Delhi'.
+SELECT *
+FROM Client_master_21340425026
+WHERE City IN ('Bombay', 'Delhi');
+
+5. Print the list of all clients whose bal_due is greater than value 10,000.
+SELECT *
+FROM Client_master_21340425026
+WHERE Balance_due > 10000;
+
+6. Print the information from sales_order table for orders places in the month
+   of January.
+SELECT *
+FROM Sales_order_21340425026
+WHERE TO_CHAR(Order_date, 'MON') = 'JAN';
+
+7. Display the order information for client_no 'C001' and 'C002'.
+SELECT *
+FROM Sales_order_21340425026
+WHERE Client_no IN ('C001', 'C002');
+
+8. Find products whose selling price greater than 2000 and less than 5000.
+SELECT *
+FROM Product_master_21340425026
+WHERE Sell_price > 2000
+AND Sell_price < 5000;
+
+9. Find products whose selling price is more than 1500. Calculate a new selling
+   price as original sellingprice*1.15. Rename the new column in the above
+   query as New_price.
+SELECT Product_no, Description, Sell_price, (Sell_price * 1.15) AS New_price
+FROM Product_master_21340425026
+WHERE Sell_price > 1500;
+
+10. List the names, city and state of clients who are not in the state of
+    'Maharastra'.
+SELECT Name, City, State
+FROM Client_master_21340425026
+WHERE State != 'Maharastra';
+
+11. Display the month(in alphabets) and date when the order must be delivered.
+SELECT TO_CHAR(Delivery_date, 'Month') AS Delivery_Month, Delivery_date AS Delivery_Day
+FROM Sales_order_21340425026;
+
+12. Display the Order_date in the format 'DD-Month-YY' e.g 12-February-13.
+SELECT TO_CHAR(Order_date, 'DD-Month-YY') AS Order_date
+FROM Sales_order_21340425026;
+
+13. Find the date, 15 days after today's date.
+SELECT SYSDATE + 15 AS Date_After_15_Days
+FROM DUAL;

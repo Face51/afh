@@ -1,0 +1,64 @@
+ASSIGNMENT - 3
+(Based on Client_master_21340425026, Product_master_21340425026, Sales_order_21340425026)
+
+1. Count the total number of orders.
+SELECT COUNT(*) AS Total_Orders
+FROM Sales_order_21340425026;
+
+2. Calculate the average price of all the products.
+SELECT AVG(Sell_price) AS Average_Price
+FROM Product_master_21340425026;
+
+3. Count the number of products having price greater than or equal to 1500.
+SELECT COUNT(*) AS Product_Count
+FROM Product_master_21340425026
+WHERE Sell_price >= 1500;
+
+4. Determine the maximum and minimum product prices. Rename the output as
+   max_price and min_price respectively.
+SELECT MAX(Sell_price) AS max_price, MIN(Sell_price) AS min_price
+FROM Product_master_21340425026;
+
+5. Change the City of the Client_no 'C005' to 'Madras'.
+UPDATE Client_master_21340425026
+SET City = 'Madras'
+WHERE Client_no = 'C005';
+
+6. Change the Bal_due of Client_no 'C005' to Rs.3000/-.
+UPDATE Client_master_21340425026
+SET Balance_due = 3000
+WHERE Client_no = 'C005';
+
+7. Delete from client_master where the column state holds the value 'Tamilnadu'.
+DELETE FROM Client_master_21340425026
+WHERE State = 'TamilNadu';
+
+8. Add a column called 'Telephone' of data type 'number' and size 10 in the
+   table client_master.
+ALTER TABLE Client_master_21340425026
+ADD (Telephone NUMBER(10));
+
+9. Change the size of data type Pin_code to 10 in the table client_master.
+ALTER TABLE Client_master_21340425026
+MODIFY (Pincode NUMBER(10));
+
+10. Drop the column Address2 from the table client_master.
+ALTER TABLE Client_master_21340425026
+DROP COLUMN Address2;
+
+11. Create another table client_master_duplicate with the same structure of
+    client_master (without copying the data of the table client_master).
+CREATE TABLE Client_master_duplicate AS
+SELECT * FROM Client_master_21340425026
+WHERE 1 = 2;
+
+12. Insert the data into client_master_duplicate table from client_master
+    table.
+INSERT INTO Client_master_duplicate
+SELECT * FROM Client_master_21340425026;
+
+13. Rename the table client_master_duplicate to c_master.
+RENAME Client_master_duplicate TO c_master;
+
+14. Destroy the table c_master with its data.
+DROP TABLE c_master;
