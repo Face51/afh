@@ -1,0 +1,126 @@
+Assignment-4 : SQL Solutions
+(Using Oracle's default EMP and DEPT tables)
+EMP(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+DEPT(DEPTNO, DNAME, LOC)
+=====================================================================
+
+1. Display the names of all employees right aligning them to 15 characters.
+--------------------------------------
+SELECT LPAD(ENAME, 15) AS ENAME
+FROM EMP;
+
+
+2. Display the names of all employees padding them to the right up to
+   15 characters with '*'.
+--------------------------------------
+SELECT RPAD(ENAME, 15, '*') AS ENAME
+FROM EMP;
+
+
+3. Find the details of all the managers in department 10 and all clerks
+   in department 20 and all employees who are neither managers nor
+   clerks but whose salary is more than or equal to 2000/-.
+--------------------------------------
+SELECT *
+FROM EMP
+WHERE (JOB = 'MANAGER' AND DEPTNO = 10)
+   OR (JOB = 'CLERK' AND DEPTNO = 20)
+   OR (JOB NOT IN ('MANAGER', 'CLERK') AND SAL >= 2000);
+
+
+4. List all the employees who have joined between 01/02/81 and 31/08/81.
+--------------------------------------
+SELECT *
+FROM EMP
+WHERE HIREDATE BETWEEN TO_DATE('01-FEB-1981', 'DD-MON-YYYY')
+                    AND TO_DATE('31-AUG-1981', 'DD-MON-YYYY');
+
+
+5. List all the employees who were joined as manager during 1981.
+--------------------------------------
+SELECT *
+FROM EMP
+WHERE JOB = 'MANAGER'
+  AND HIREDATE BETWEEN TO_DATE('01-JAN-1981', 'DD-MON-YYYY')
+                    AND TO_DATE('31-DEC-1981', 'DD-MON-YYYY');
+
+
+6. List the employees whose salaries are 800, 1600 or 2450.
+--------------------------------------
+SELECT *
+FROM EMP
+WHERE SAL IN (800, 1600, 2450);
+
+
+7. List the names of all employees who are either 'clerks' or
+   'salesman' or 'analyst'.
+--------------------------------------
+SELECT ENAME
+FROM EMP
+WHERE JOB IN ('CLERK', 'SALESMAN', 'ANALYST');
+
+
+8. List the total number of employees and the average salaries of the
+   different departments.
+--------------------------------------
+SELECT DEPTNO, COUNT(*) AS total_employees, AVG(SAL) AS average_salary
+FROM EMP
+GROUP BY DEPTNO;
+
+
+9. Calculate the average salary of all employees whose department is 30.
+--------------------------------------
+SELECT AVG(SAL) AS average_salary
+FROM EMP
+WHERE DEPTNO = 30;
+
+
+10. Calculate the minimum salary earn by a 'clerks'.
+--------------------------------------
+SELECT MIN(SAL) AS min_salary
+FROM EMP
+WHERE JOB = 'CLERK';
+
+
+11. Calculate the maximum salary earn by salesman.
+--------------------------------------
+SELECT MAX(SAL) AS max_salary
+FROM EMP
+WHERE JOB = 'SALESMAN';
+
+
+12. Find the names of those employees whose immediate boss is in a
+    different department.
+--------------------------------------
+SELECT E.ENAME
+FROM EMP E, EMP M
+WHERE E.MGR = M.EMPNO
+  AND E.DEPTNO <> M.DEPTNO;
+
+
+13. Calculate the no of employees who are not getting any commission.
+--------------------------------------
+SELECT COUNT(*) AS no_commission
+FROM EMP
+WHERE COMM IS NULL OR COMM = 0;
+
+
+14. Find the department that is not having any employee.
+--------------------------------------
+SELECT *
+FROM DEPT
+WHERE DEPTNO NOT IN (
+    SELECT DEPTNO FROM EMP WHERE DEPTNO IS NOT NULL
+);
+
+
+Notes
+=====================================================================
+- Solutions assume Oracle's classic sample schema:
+  EMP(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+  DEPT(DEPTNO, DNAME, LOC)
+- Date functions (TO_DATE) use Oracle syntax; adjust format if your
+  Oracle session's NLS date format differs.
+- Q13 treats "not getting any commission" as COMM being NULL or 0 â€”
+  in the default Oracle EMP table this is usually just NULL, so
+  "WHERE COMM IS NULL" alone also works if 0 values aren't present.
