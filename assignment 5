@@ -1,0 +1,125 @@
+Assignment-5 : SQL Solutions
+(Using Oracle's default EMP and DEPT tables)
+EMP(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+DEPT(DEPTNO, DNAME, LOC)
+=====================================================================
+
+1. List all the employee names, dept name and the city, in department
+   name order.
+--------------------------------------
+SELECT E.ENAME, D.DNAME, D.LOC
+FROM EMP E
+JOIN DEPT D ON E.DEPTNO = D.DEPTNO
+ORDER BY D.DNAME;
+
+
+2. List all employees working in Dallas in descending order of salary.
+--------------------------------------
+SELECT E.*
+FROM EMP E
+JOIN DEPT D ON E.DEPTNO = D.DEPTNO
+WHERE D.LOC = 'DALLAS'
+ORDER BY E.SAL DESC;
+
+
+3. List employee name, department name, job and location of all
+   employees who work in DALLAS.
+--------------------------------------
+SELECT E.ENAME, D.DNAME, E.JOB, D.LOC
+FROM EMP E
+JOIN DEPT D ON E.DEPTNO = D.DEPTNO
+WHERE D.LOC = 'DALLAS';
+
+
+4. List the employee name, salary, PF, HRA, DA and gross salary;
+   order the result in ascending order of gross. PF is 10% of salary,
+   HRA is 60% of salary and DA is 40% of salary.
+--------------------------------------
+SELECT ENAME,
+       SAL,
+       SAL * 0.10 AS PF,
+       SAL * 0.60 AS HRA,
+       SAL * 0.40 AS DA,
+       SAL + (SAL * 0.60) + (SAL * 0.40) AS GROSS
+FROM EMP
+ORDER BY GROSS ASC;
+
+
+5. Display names and salary of all the employees who report to KING.
+--------------------------------------
+SELECT ENAME, SAL
+FROM EMP
+WHERE MGR = (SELECT EMPNO FROM EMP WHERE ENAME = 'KING');
+
+
+6. List all employees who work in DALLAS and earn more than any
+   employee working in Chicago.
+--------------------------------------
+SELECT *
+FROM EMP
+WHERE DEPTNO IN (SELECT DEPTNO FROM DEPT WHERE LOC = 'DALLAS')
+  AND SAL > ANY (
+        SELECT SAL FROM EMP
+        WHERE DEPTNO IN (SELECT DEPTNO FROM DEPT WHERE LOC = 'CHICAGO')
+      );
+
+
+7. List all employees who work in the same post as Smith.
+--------------------------------------
+SELECT *
+FROM EMP
+WHERE JOB = (SELECT JOB FROM EMP WHERE ENAME = 'SMITH')
+  AND ENAME <> 'SMITH';
+
+
+8. Find the job with the highest average salary.
+--------------------------------------
+SELECT JOB, AVG(SAL) AS avg_salary
+FROM EMP
+GROUP BY JOB
+HAVING AVG(SAL) = (
+    SELECT MAX(avg_sal)
+    FROM (SELECT AVG(SAL) AS avg_sal FROM EMP GROUP BY JOB)
+);
+
+
+9. List the top 10 earners in the company.
+--------------------------------------
+SELECT *
+FROM (SELECT * FROM EMP ORDER BY SAL DESC)
+WHERE ROWNUM <= 10;
+
+
+10. Display the names of all employees' replacing 'A' with 'a'.
+--------------------------------------
+SELECT REPLACE(ENAME, 'A', 'a') AS ENAME
+FROM EMP;
+
+
+11. Show the salary of all the employees rounding it to the nearest
+    Rs.1000/-.
+--------------------------------------
+SELECT ENAME, ROUND(SAL, -3) AS SAL
+FROM EMP;
+
+
+12. Show the first three and last three characters of the names of
+    all the employees.
+--------------------------------------
+SELECT SUBSTR(ENAME, 1, 3) AS first_three,
+       SUBSTR(ENAME, -3) AS last_three
+FROM EMP;
+
+
+Notes
+=====================================================================
+- Q6 uses "> ANY", which in SQL means greater than at least one value
+  in the Chicago salary list (not necessarily the highest). If your
+  course intends "greater than every Chicago employee" instead, use
+  "> ALL" in place of "> ANY".
+- Q8's subquery avoids nested aggregates (MAX(AVG(...)) is not valid
+  directly in Oracle); it wraps the grouped averages in an inline
+  view first.
+- Q9 uses the classic ROWNUM pattern for "top N" rows, which works
+  across Oracle versions. If you're on Oracle 12c or later, you can
+  instead write: ... ORDER BY SAL DESC FETCH FIRST 10 ROWS ONLY.
